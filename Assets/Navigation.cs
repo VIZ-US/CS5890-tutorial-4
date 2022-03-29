@@ -7,6 +7,8 @@ using Unity.XR.CoreUtils;
 
 public class Navigation : MonoBehaviour
 {
+
+
     public XRNode inputSource;
     private Vector2 inputAxis;
     private CharacterController character;
@@ -17,12 +19,10 @@ public class Navigation : MonoBehaviour
     private XROrigin rig;
 
 
-    private float gravity = -9.81f;
-    private float fallingSpeed;
-
-    public LayerMask groundLayer;
+    private float fallingSpeed = -9.81f;
 
     // Start is called before the first frame update
+
     void Start()
     {
         character = GetComponent<CharacterController>();
@@ -43,20 +43,7 @@ public class Navigation : MonoBehaviour
 
         character.Move(direction * Time.fixedDeltaTime * speed);
 
-        //gravity
-        bool isGrounded = checkIfGrounded();
-        if (isGrounded)
-            fallingSpeed = 0;
-        else
-            fallingSpeed += gravity * Time.fixedDeltaTime;
         character.Move(Vector3.up * fallingSpeed * Time.fixedDeltaTime);
     }
 
-    bool checkIfGrounded()
-    {
-        Vector3 rayStart = transform.TransformPoint(character.center);
-        float length = character.center.y + 0.01f;
-        bool hasHit = Physics.SphereCast(rayStart, character.radius, Vector3.down, out RaycastHit HitInfo, length, groundLayer);
-        return hasHit;
-    }
 }
